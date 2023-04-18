@@ -3,6 +3,8 @@ let config = {
     width: 640,
     height: 480,
     scene: [Menu,Play]
-    //the scene part gets rid of the canvas
 }
 let game=new Phaser.Game(config);
+//setting UI sizes
+let borderUISize=game.config.height /15;
+let borderPadding=borderUISize/3;
