@@ -12,7 +12,7 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
             padding: {
@@ -36,6 +36,7 @@ class Menu extends Phaser.Scene {
           // easy mode
           game.settings = {
             spaceshipSpeed: 3,
+            butterSpeed: 5,
             gameTimer: 60000    
           }
           this.sound.play('sfx_select');
@@ -45,6 +46,7 @@ class Menu extends Phaser.Scene {
           // hard mode
           game.settings = {
             spaceshipSpeed: 4,
+            butterSpeed: 6,
             gameTimer: 45000    
           }
           this.sound.play('sfx_select');

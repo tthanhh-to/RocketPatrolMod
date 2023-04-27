@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
         //loading images/sprites
         this.load.image('rocket', './assets/toasty.png');
         this.load.image('spaceship', './assets/toaster.png');
+        this.load.image('butter', './assets/butter_stick_1.png');
         this.load.image('starfield', './assets/starfield.png');
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -14,12 +15,14 @@ class Play extends Phaser.Scene {
         this.starfield=this.add.tileSprite(0,0,640,480,'starfield').setOrigin(0,0);
         //adds the rocket
         this.p1Rocket = new Rocket(this, game.config.width/2, borderUISize, 'rocket').setOrigin(0.5, 0);
+        //adds butter
+        this.butter = new Butter(this, game.config.width + borderUISize*10, borderUISize*11, 'butter', 0, 40).setOrigin(0, 0);
         //purple rectangle
         this.add.rectangle(0,borderUISize+borderPadding*34,game.config.width, borderUISize*2,0xead5fe).setOrigin(0,0);
         //adds spaceships
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*7, 'spaceship', 0, 10).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*8 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*9 + borderPadding*4, 'spaceship', 0, 30).setOrigin(0,0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*6, 'spaceship', 0, 10).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*7 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*8 + borderPadding*4, 'spaceship', 0, 30).setOrigin(0,0);
         //white border 
         this.add.rectangle(0,0, game.config.width, borderUISize,0xFFFFFF).setOrigin(0,0);
         this.add.rectangle(0,game.config.height-borderUISize,game.config.width,borderUISize,0xFFFFFF).setOrigin(0,0);
@@ -40,7 +43,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
             padding: {
@@ -63,7 +66,7 @@ class Play extends Phaser.Scene {
         let clockConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
             padding: {
@@ -89,6 +92,7 @@ class Play extends Phaser.Scene {
             this.ship01.update();           // update spaceships (x3)
             this.ship02.update();
             this.ship03.update();
+            this.butter.update();
         } 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
