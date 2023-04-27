@@ -12,11 +12,11 @@ class Play extends Phaser.Scene {
     }
     create() {
         //scrolling starfield
-        this.starfield=this.add.tileSprite(0,0,640,480,'starfield').setOrigin(0,0);
+        this.starfield=this.add.tileSprite(0,0,800,600,'starfield').setOrigin(0,0);
         //adds the rocket
         this.p1Rocket = new Rocket(this, game.config.width/2, borderUISize, 'rocket').setOrigin(0.5, 0);
         //adds butter
-        this.butter = new Butter(this, game.config.width + borderUISize*10, borderUISize*11, 'butter', 0, 40).setOrigin(0, 0);
+        this.butter = new Butter(this, game.config.width + borderUISize*10, borderUISize*11, 'butter', 0, 50).setOrigin(0, 0);
         //purple rectangle
         this.add.rectangle(0,borderUISize+borderPadding*34,game.config.width, borderUISize*2,0xead5fe).setOrigin(0,0);
         //adds spaceships
@@ -52,15 +52,20 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*35, this.p1Score, scoreConfig);
-        scoreConfig.fixedWidth = 0;
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*36, this.p1Score, scoreConfig);
+        this.scoreTitle = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*34, "Score", scoreConfig);
+        scoreConfig.fixedWidth = 150;
+        //highscore
+        this.highScore = this.add.text(borderUISize + borderPadding*12, borderUISize + borderPadding*34, "Hi-Score", scoreConfig);
+        this.highScore = this.add.text(borderUISize + borderPadding*12, borderUISize + borderPadding*36, this.p1Score, scoreConfig);
+
         //the clock
         this.gameOver = false;
         // 60-second play clock
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(60000, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+            this.add.text(game.config.width/2, game.config.height/3, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/3 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
         let clockConfig = {
@@ -75,11 +80,12 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.clockLeft = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*35, this.p1Score, clockConfig);
+        this.clockTitle = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*34, "Time", clockConfig);
+        this.clockTime = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*36, 60, clockConfig);
         clockConfig.fixedWidth = 0;
     }
-    
     update() {
+        this.clockTime.text=Math.floor(this.clock.getRemainingSeconds());
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
@@ -94,6 +100,11 @@ class Play extends Phaser.Scene {
             this.ship03.update();
             this.butter.update();
         } 
+        this.highScore.text = localStorage.getItem("highscore");
+        if (this.p1Score>localStorage.getItem("highscore")){
+            localStorage.setItem("highscore", this.p1Score);
+        }
+
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
@@ -106,6 +117,10 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if (this.checkCollision(this.p1Rocket, this.butter)) {
+            this.p1Rocket.reset();
+            this.shipExplode(this.butter);
         }
     }
     checkCollision(rocket, ship) {
