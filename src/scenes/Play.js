@@ -7,12 +7,12 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/toasty.png');
         this.load.image('spaceship', './assets/toaster.png');
         this.load.image('butter', './assets/butter_stick_1.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('sky', './assets/sky.png');
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
     create() {
         //scrolling starfield
-        this.starfield=this.add.tileSprite(0,0,800,600,'starfield').setOrigin(0,0);
+        this.sky=this.add.tileSprite(0,0,800,600,'sky').setOrigin(0,0);
         //adds the rocket
         this.p1Rocket = new Rocket(this, game.config.width/2, borderUISize, 'rocket').setOrigin(0.5, 0);
         //adds butter
@@ -41,8 +41,8 @@ class Play extends Phaser.Scene {
         //score calc
         this.p1Score = 0;
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
+            fontFamily: 'Concert One',
+            fontSize: '25px',
             backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
@@ -69,8 +69,8 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
         }, null, this);
         let clockConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
+            fontFamily: 'Concert One',
+            fontSize: '25px',
             backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
@@ -92,7 +92,7 @@ class Play extends Phaser.Scene {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
         }
-        this.starfield.tilePositionX -= 4;
+        this.sky.tilePositionX -= 8;
         if (!this.gameOver) {               
             this.p1Rocket.update();         // update rocket sprite
             this.ship01.update();           // update spaceships (x3)
