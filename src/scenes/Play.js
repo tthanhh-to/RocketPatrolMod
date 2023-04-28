@@ -148,6 +148,11 @@ class Play extends Phaser.Scene {
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
-        this.sound.play('sfx_explosion');
+        if (ship==this.butter){
+            this.sound.play('sfx_butter');
+        }
+        else{
+            this.sound.play('sfx_toaster_ding');
+        }
     }
 }
