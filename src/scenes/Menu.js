@@ -9,7 +9,8 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_toaster_ding','./assets/toaster_ding.wav');
         this.load.audio('sfx_explosion', './assets/assets_explosion38.wav');
         this.load.audio('sfx_rocket', './assets/assets_rocket_shot.wav');
-    }
+        this.load.audio('play_music', './assets/play_music.wav');
+      }
     create() {
         let menuConfig = {
             fontFamily: 'Concert One',

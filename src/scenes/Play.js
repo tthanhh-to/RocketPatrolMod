@@ -42,57 +42,46 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         let scoreConfig = {
             fontFamily: 'Concert One',
-            fontSize: '25px',
+            fontSize: '28px',
             backgroundColor: '#ffeb7a',
             color: '#843605',
             align: 'right',
             padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
+                top: 4,
+                bottom: 4,
+            }
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*36, this.p1Score, scoreConfig);
-        this.scoreTitle = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*34, "Score", scoreConfig);
-        scoreConfig.fixedWidth = 150;
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*34, "score\n"+this.p1Score, scoreConfig);
         //highscore
-        this.highScore = this.add.text(borderUISize + borderPadding*12, borderUISize + borderPadding*34, "Hi-Score", scoreConfig);
-        this.highScore = this.add.text(borderUISize + borderPadding*12, borderUISize + borderPadding*36, this.p1Score, scoreConfig);
-
-        //the clock
+        this.highScore = this.add.text(borderUISize + borderPadding*6, borderUISize + borderPadding*34, "hi-Score\n"+this.p1Score, scoreConfig);
+        // GAME OVER flag
         this.gameOver = false;
+        //fire
+        this.fire = this.add.text(borderUISize + borderPadding*30, borderUISize + borderPadding*34, "FIRE", scoreConfig);        
         // 60-second play clock
-        scoreConfig.fixedWidth = 0;
+        scoreConfig.width=500;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/3, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/3 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/3 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
-        let clockConfig = {
-            fontFamily: 'Concert One',
-            fontSize: '25px',
-            backgroundColor: '#ffeb7a',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
-        this.clockTitle = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*34, "Time", clockConfig);
-        this.clockTime = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*36, 60, clockConfig);
-        clockConfig.fixedWidth = 0;
+        this.clockTime = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*34, 60, scoreConfig);
+        this.music =  this.sound.add('play_music', {
+            volume: 0.2,
+            loop: true
+        })
+        this.fire.alpha=1;
+        this.music.play()
     }
     update() {
-        this.clockTime.text=Math.floor(this.clock.getRemainingSeconds());
+        this.clockTime.text="time\n"+Math.floor(this.clock.getRemainingSeconds());
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
         }
-        this.sky.tilePositionX -= 8;
+        this.sky.tilePositionX -= 6;
         if (!this.gameOver) {               
             this.p1Rocket.update();         // update rocket sprite
             this.ship01.update();           // update spaceships (x3)
@@ -100,21 +89,24 @@ class Play extends Phaser.Scene {
             this.ship03.update();
             this.butter.update();
         } 
-        this.highScore.text = localStorage.getItem("highscore");
+        this.highScore.text = "hi-score\n"+localStorage.getItem("highscore");
         if (this.p1Score>localStorage.getItem("highscore")){
             localStorage.setItem("highscore", this.p1Score);
         }
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
+            this.fire.alpha = 0;                         
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);   
           }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
+            this.fire.alpha = 0;                         
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
+            this.fire.alpha = 0;                         
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
@@ -134,24 +126,30 @@ class Play extends Phaser.Scene {
             return false;
         }
     }
+
     shipExplode(ship) {
         // temporarily hide ship
-        ship.alpha = 0;                         
         // create explosion sprite at ship's position
         let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
         boom.anims.play('explode');             // play explode animation
+        ship.reset();                       // reset ship position
+
         boom.on('animationcomplete', () => {    // callback after ani completes
-            ship.reset();                       // reset ship position
+            this.fire.alpha=0;
             ship.alpha = 1;                     // make ship visible again
             boom.destroy();                     // remove explosion sprite
+            this.fire.alpha=1;
+
         });
-        // score add and repaint
+
         this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
+        this.scoreLeft.text = "score\n"+this.p1Score;
         if (ship==this.butter){
+            this.clock.delay+=5000;
             this.sound.play('sfx_butter');
         }
         else{
+            this.clock.delay+=1000;
             this.sound.play('sfx_toaster_ding');
         }
     }
