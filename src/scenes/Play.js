@@ -145,11 +145,11 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         this.scoreLeft.text = "score\n"+this.p1Score;
         if (ship==this.butter){
-            this.clock.delay+=5000;
+            this.clock.delay+=4000;
             this.sound.play('sfx_butter');
         }
         else{
-            this.clock.delay+=1000;
+            this.clock.delay+=2000;
             this.sound.play('sfx_toaster_ding');
         }
     }
