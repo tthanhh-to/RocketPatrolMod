@@ -67,8 +67,11 @@ class Play extends Phaser.Scene {
             loop: true
         })
         this.music.play()
+
+
     }
     update() {
+
         if(this.p1Rocket.isFiring){
             this.fire.setVisible(true);
         }
@@ -80,6 +83,7 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.music.stop()
             this.scene.start("menuScene");
         }
         this.sky.tilePositionX -= 6;
@@ -144,8 +148,23 @@ class Play extends Phaser.Scene {
             this.sound.play('sfx_butter');
         }
         else{
-            this.clock.delay+=2000;
-            this.sound.play('sfx_toaster_ding');
+            var sfx = Phaser.Math.Between(1, 4);
+            if (sfx==1){
+                this.sound.play('sfx_ching');
+                this.clock.delay+=2000;
+            }
+            else if(sfx==2){
+                this.sound.play('sfx_bonk');
+                this.clock.delay+=2000;
+            }
+            else if(sfx==3){
+                this.sound.play('sfx_boing');
+                this.clock.delay+=2000;
+            }
+            else{
+                this.sound.play('sfx_pew');
+                this.clock.delay+=2000;
+            }
         }
         //white border 
         this.add.rectangle(0,0, game.config.width, borderUISize,0xFFFFFF).setOrigin(0,0);

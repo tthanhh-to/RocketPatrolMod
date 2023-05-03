@@ -6,7 +6,8 @@
 //25
 //10 Create a new title screen (e.g., new artwork, typography, layout)
 //10 Display the time remaining (in seconds) on the screen 
-//20
+//10 Create 4 new explosion sound effects and randomize which one plays on impact
+//30
 //15 Create a new enemy Spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points 
 //15 Implement a new timing/scoring mechanism that adds time to the clock for successful hits
 //15 Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
