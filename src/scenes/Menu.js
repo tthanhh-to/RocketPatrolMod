@@ -30,7 +30,7 @@ class Menu extends Phaser.Scene {
       //menu text
       this.add.text(game.config.width/4, game.config.height/4 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
       this.add.text(game.config.width-500, game.config.height-250, 'Use ←→ arrows\n to move & \n(F) to fire', menuConfig).setOrigin(0.5);
-      this.add.text(game.config.width-100, game.config.height-120, 'Press\n ← for Novice \nor \n→ for Expert', menuConfig).setOrigin(0.5);
+      this.add.text(game.config.width-104, game.config.height-118, 'Press\n ← for Novice \nor \n→ for Expert', menuConfig).setOrigin(0.5);
       //keys for menu
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
